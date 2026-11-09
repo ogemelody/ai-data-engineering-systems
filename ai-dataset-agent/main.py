@@ -1,14 +1,12 @@
-from src.tools import (
-    inspect_schema,
-    profile_dataset,
-    calculate_metrics
+from agent import run_agent
+
+question = (
+    "How many columns are in my dataset?"
+    "Which category generated the highest revenue?"
+    "Check the dataset for missing values and give me total revenue."
 )
 
-print("SCHEMA:")
-print(inspect_schema())
+answer = run_agent(question)
 
-print("\nDATA QUALITY:")
-print(profile_dataset())
-
-print("\nSALES METRICS:")
-print(calculate_metrics())
+print("\nAGENT RESPONSE:")
+print(answer)
