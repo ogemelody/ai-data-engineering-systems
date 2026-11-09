@@ -1,5 +1,14 @@
-from src.tools import inspect_schema
+from src.tools import (
+    inspect_schema,
+    profile_dataset,
+    calculate_metrics
+)
 
-result = inspect_schema()
+print("SCHEMA:")
+print(inspect_schema())
 
-print(result)
+print("\nDATA QUALITY:")
+print(profile_dataset())
+
+print("\nSALES METRICS:")
+print(calculate_metrics())
