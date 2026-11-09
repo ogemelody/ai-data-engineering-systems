@@ -1,4 +1,5 @@
 
+#defines functions to the model using JSON schemas
 TOOLS = [
     {
         "type": "function",
