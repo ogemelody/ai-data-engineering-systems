@@ -14,7 +14,11 @@ load_dotenv()
 client = OpenAI()
 
 
-def run_agent(question: str) -> DatasetAnswer:
+def run_agent(
+    question: str,
+    trace: list[str] | None = None,
+) -> DatasetAnswer:
+
     if not isinstance(question, str):
         raise TypeError("Question must be a string.")
 
@@ -25,18 +29,21 @@ def run_agent(question: str) -> DatasetAnswer:
     instructions = """
     You are a read-only Dataset Inspection Agent.
 
-    Supported capabilities:
-    - Inspect the dataset schema
-    - Profile missing values and duplicates
-    - Calculate sales metrics
+    Use approved tools for all dataset facts.
+    Do not invent data, calculations, or capabilities.
 
-    Use approved tools to establish dataset facts.
-    Never invent numbers or claim unperformed actions.
-    Do not assume a currency.
-    For out-of-scope requests, explain the limitation.
-
-    Populate structured fields only when supported
-    by actual tool results. Otherwise use null.
+    Structured response rules:
+    - Populate column_count only if inspect_schema
+      was successfully executed.
+    - Populate total_revenue and top_category only
+      if calculate_metrics was successfully executed.
+    - Populate missing_values only if profile_dataset
+      was successfully executed.
+    - Otherwise set the corresponding field to null.
+    - Answer only the question asked, using verified data.
+    - Do not assume a currency.
+    - For unrelated requests, explain that they are
+      outside your dataset-analysis capabilities.
     """
 
     # Keep trusted results from executed tools.
@@ -67,6 +74,8 @@ def run_agent(question: str) -> DatasetAnswer:
                 raise RuntimeError(
                     "No structured response returned."
                 )
+
+
 
             # Verify structured values against
             # successful Python tool results.
@@ -109,6 +118,10 @@ def run_agent(question: str) -> DatasetAnswer:
                 )
 
                 verified_results[call.name] = result
+
+                # NEW: Record successfully executed tools.
+                if trace is not None:
+                    trace.append(call.name)
 
             except (
                 ValueError,

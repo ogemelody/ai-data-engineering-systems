@@ -2,10 +2,8 @@
 from agent import run_agent
 
 question = (
-    "How many columns are in the dataset? "
-    "Which category generated the highest revenue? "
-    "Are there any missing values? "
-    "What is the total revenue?"
+     "How many columns are in my dataset, "
+    "and what is the total revenue?"
 )
 
 result = run_agent(question)
