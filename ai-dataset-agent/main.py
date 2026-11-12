@@ -1,12 +1,17 @@
+
 from agent import run_agent
 
 question = (
-    "How many columns are in my dataset?"
-    "Which category generated the highest revenue?"
-    "Check the dataset for missing values and give me total revenue."
+    "How many columns are in the dataset? "
+    "Which category generated the highest revenue? "
+    "Are there any missing values? "
+    "What is the total revenue?"
 )
 
-answer = run_agent(question)
+result = run_agent(question)
 
-print("\nAGENT RESPONSE:")
-print(answer)
+print("\nSTRUCTURED AGENT RESPONSE:")
+print(result.model_dump_json(indent=2))
+
+print("\nHUMAN-READABLE ANSWER:")
+print(result.answer)
